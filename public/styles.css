@@ -1,0 +1,62 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 1200px;
+}
+
+.table {
+    margin-top: 20px;
+}
+
+
+
+.background {
+    background-image: url('/img/background.02fbcbc5.png');
+    background-size: cover; /* Масштабирует изображение, чтобы оно покрывало всю область */
+    background-repeat: no-repeat; /* Запрещает повторение изображения */
+    background-attachment: fixed; /* Фиксирует изображение, чтобы оно не прокручивалось */
+}
+
+.table tbody tr td{
+    background-color: rgba(255, 255, 255, 0.7); /* Белый цвет с прозрачностью 70% */
+}
+
+/* Центрирование формы */
+.centered-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+/* Стили для уменьшения ширины поля age */
+.age-input {
+    max-width: 100px; /* Уменьшаем ширину поля age */
+}
+
+/* Стили для размещения полей на одной строке */
+.inline-fields {
+    display: flex;
+    gap: 10px; /* Расстояние между полями */
+}
+
+.inline-fields .form-control {
+    flex: 1; /* Равномерное распределение ширины */
+}
+
+/* Стили для кнопок */
+.button-container {
+    display: flex;
+    gap: 10px; /* Расстояние между кнопками */
+    margin-top: 20px; /* Отступ сверху */
+}
