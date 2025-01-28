@@ -1,6 +1,5 @@
 <?php
-// Подключение к базе данных
-include 'db.php';
+include './db/db.php';
 
 // Проверка, передан ли параметр id
 if (isset($_GET['id'])) {

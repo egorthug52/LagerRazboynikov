@@ -1,5 +1,5 @@
 <?php 
-include 'db.php';
+include './db/db.php';
 
 session_start();
 if (!isset($_SESSION['user_id'])) {
@@ -19,7 +19,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <title>Добавить пациента</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./css/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -29,7 +29,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
     <div class="container mt-5">
         <div class="centered-form">
             <h1 class="text-center mb-4">Добавить пациента</h1>
-            <form action="save.php" method="POST" id="patientForm">
+            <form action="./php/save.php" method="POST" id="patientForm">
                 <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
                 <input type="hidden" name="username" value="<?php echo $user['username']; ?>">
                 <div class="mb-3 input-clear">

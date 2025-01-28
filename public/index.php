@@ -1,4 +1,5 @@
-<?php include 'db.php';
+<?php
+include './db/db.php';
 
 session_start();
 if (!isset($_SESSION['user_id'])) {
@@ -20,7 +21,7 @@ $isAdmin = $user['isAdmin'] ?? 0;
     <meta charset="UTF-8">
     <title>Облачное хранилище</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./css/styles.css">
 </head>
 
 <body class="background">
@@ -29,7 +30,7 @@ $isAdmin = $user['isAdmin'] ?? 0;
             <h1 class="text-center">Список пациентов</h1>
             <div>
                 <span>Вы вошли как <strong><?php echo $_SESSION['username']; ?></strong></span>
-                <a href="logout.php" class="btn btn-danger ms-3">Выйти</a>
+                <a href="./php/logout.php" class="btn btn-danger ms-3">Выйти</a>
             </div>
         </div>
         <a href="add.php" class="btn btn-primary mb-3">Добавить пациента</a>

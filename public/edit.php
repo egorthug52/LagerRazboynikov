@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+include './db/db.php';
 
 // Получаем id пациента из GET-запроса
 if (isset($_GET['id'])) {
@@ -50,7 +50,7 @@ if (isset($_GET['id'])) {
     <div class="container mt-5">
         <div class="centered-form">
             <h1 class="text-center mb-4">Редактирование карты <?php echo $patient['register_num']; ?></h1>
-            <form action="update.php" method="POST">
+            <form action="./php/update.php" method="POST">
                 <input type="hidden" name="id" value="<?php echo $patient['id']; ?>">
 
                 <div class="mb-3 input-clear inline-fields">
