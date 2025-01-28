@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         session_start();
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $username;
-        header("Location: index.php");
+        header("Location: ../index.php");
     } else {
         echo "Неверное имя пользователя или пароль!";
     }
