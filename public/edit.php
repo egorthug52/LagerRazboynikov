@@ -1,11 +1,9 @@
 <?php
 include './db/db.php';
 
-// Получаем id пациента из GET-запроса
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
-    // Получаем данные пациента из базы данных
     $stmt = $conn->prepare(
                             "SELECT 
                                 patients.*, 
@@ -41,7 +39,7 @@ if (isset($_GET['id'])) {
     <title>Редактировать пациента</title>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
@@ -153,12 +151,12 @@ if (isset($_GET['id'])) {
                 if (confirmedDate.val() && new Date(confirmedDate.val()) < new Date(diseaseDate.val())) {
                     alert('Дата подтверждения не может быть раньше даты установления диагноза!');
                     confirmedDate.val('');
-                    toggleFields(); // Разблокировать поля после очистки
+                    toggleFields();
                 }
                 if (cancellationDate.val() && new Date(cancellationDate.val()) < new Date(diseaseDate.val())) {
                     alert('Дата отмены не может быть раньше даты установления диагноза!');
                     cancellationDate.val('');
-                    toggleFields(); // Разблокировать поля после очистки
+                    toggleFields();
                 }
             }
 
@@ -172,7 +170,6 @@ if (isset($_GET['id'])) {
                 toggleFields();
             });
 
-            // Инициализация при загрузке страницы
             toggleFields();
 
             // Ограничения для поля first_name
@@ -228,7 +225,7 @@ if (isset($_GET['id'])) {
                 $(this).val(value);
             });
 
-            // Блокировка изменения первых двух символов
+            // Блокировка изменения первых двух символов для номера телефона
             $('#phone_number').on('keydown', function (e) {
                 if (e.target.selectionStart < 2) {
                     e.preventDefault();
