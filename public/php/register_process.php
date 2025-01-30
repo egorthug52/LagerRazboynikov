@@ -9,9 +9,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt = $conn->prepare("SELECT id FROM users WHERE username = :username");
     $stmt->execute([':username' => $username]);
     if ($stmt->fetch()) {
-        echo "Пользователь с таким именем уже существует!";
+        echo "<script>alert('Пользователь уже существует'); window.history.back();</script>";
         exit;
     }
+
 
     // Добавление нового пользователя
     $sql = "INSERT INTO users (username, password) VALUES (:username, :password)";
@@ -21,6 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ':password' => $password
     ]);
 
-    header("Location: login.php");
+    header("Location: ../login.php");
 }
 ?>
