@@ -148,7 +148,6 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                 toggleFields();
             });
 
-            // Инициализация при загрузке страницы
             toggleFields();
 
             // Ограничения для поля first_name
@@ -196,8 +195,8 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                 // Удаление всех символов, кроме цифр
                 value = value.substring(0, 2) + value.substring(2).replace(/\D/g, '');
 
-                // Ограничение на 11 цифр (не считая "+7")
-                if (value.length > 12) { // "+7" + 11 цифр = 13 символов
+                // Ограничение на 11 цифр
+                if (value.length > 12) { 
                     value = value.substring(0, 12);
                 }
 

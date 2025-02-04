@@ -25,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $middle_name_char = mb_substr($middle_name, 0, 1, 'UTF-8') . '**';
     $last_name_char = mb_substr($last_name, 0, 1, 'UTF-8') . '**';
 
-    // SQL-запрос для вставки данных
     $sql = "INSERT INTO patients (
                 first_name, middle_name, last_name, phone_number, insurance_num, age, register_num, 
                 diagnosis, disease_date, confirmed_date, cancellation_date, first_name_char, middle_name_char, last_name_char, creator_id, creator_name
