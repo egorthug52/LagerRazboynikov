@@ -1,5 +1,5 @@
 <?php
-include './db/db.php';
+include '../db/db.php';
 
 // Проверка, передан ли параметр id
 if (isset($_GET['id'])) {
@@ -24,7 +24,6 @@ if (isset($_GET['id'])) {
     echo "ID записи не указан.";
 }
 
-// Перенаправление на страницу списка пациентов
-header("Location: index.php");
+header("Location: ../index.php");
 exit;
 ?>

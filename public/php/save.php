@@ -52,6 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ':creator_name' => $username,
     ]);
 
-    header("Location: index.php");
+    header("Location: ../index.php");
 }
 ?>

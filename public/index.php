@@ -92,7 +92,7 @@ $patients = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?php echo $row['creator_name']; ?></td>
                     <td>
                         <a href='edit.php?id=<?php echo $row['id']; ?>' class='btn btn-warning btn-sm'>Редактировать</a>
-                        <a href='delete.php?id=<?php echo $row['id']; ?>' class='btn btn-danger btn-sm' onclick='return confirm("Вы уверены?")'>Удалить</a>
+                        <a href='./php/delete.php?id=<?php echo $row['id']; ?>' class='btn btn-danger btn-sm' onclick='return confirm("Вы уверены?")'>Удалить</a>
                     </td>
                 <?php endif; ?>
             </tr>
