@@ -1,4 +1,4 @@
-<?php 
+<?php
 include './db/db.php';
 
 session_start();
@@ -29,7 +29,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
     <div class="container mt-5">
         <div class="centered-form">
             <h1 class="text-center mb-4">Добавить пациента</h1>
-            <form action="./php/save.php" method="POST" id="patientForm">
+            <form action="./php/save.php" method="POST" id="patientForm" enctype="multipart/form-data">
                 <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
                 <input type="hidden" name="username" value="<?php echo $user['username']; ?>">
                 <div class="mb-3 input-clear">
@@ -74,7 +74,6 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                         <option value="">Выберите диагноз</option>
                         <?php
                         $stmt = $conn->query("SELECT * FROM diseases");
-
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             echo '<option value="' . $row['id'] . '">' . $row['mkb_kod'] . ' - ' . $row['name'] . '</option>';
                         }
@@ -87,11 +86,21 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                 </div>
                 <div class="mb-3 input-clear">
                     <label for="confirmed_date" class="form-label">Дата подтверждения</label>
-                    <input type="date" class="form-control" id="confirmed_date" name="confirmed_date" required>
+                    <input type="date" class="form-control" id="confirmed_date" name="confirmed_date">
                 </div>
                 <div class="mb-3 input-clear">
                     <label for="cancellation_date" class="form-label">Дата отмены</label>
-                    <input type="date" class="form-control" id="cancellation_date" name="cancellation_date" required>
+                    <input type="date" class="form-control" id="cancellation_date" name="cancellation_date">
+                </div>
+                <div class="mb-3 input-clear">
+                    <label for="patient_file" class="form-label">Загрузить документы пациента</label>
+                    <input type="file" class="form-control" id="patient_file" name="patient_file"
+                        accept=".pdf,.doc,.docx,.jpg,.png">
+                    <div id="uploadProgress" class="progress mt-2" style="display: none;">
+                        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+                            aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div id="uploadMessage" class="mt-2"></div>
                 </div>
                 <div class="button-container">
                     <button type="submit" class="btn btn-primary">Сохранить</button>
