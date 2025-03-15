@@ -3,21 +3,28 @@ include './db/db.php';
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
+    isset($_GET['isAdmin']) ? $isAdmin = $_GET['isAdmin'] : $isAdmin = 1;
 
     $stmt = $conn->prepare(
-                            "SELECT 
-                                patients.*, 
-                                diseases.mkb_kod mkb_kod, 
-                                diseases.name diag_name,
-                                diseases.id diag_id
-                            FROM 
-                                patients 
-                            LEFT JOIN 
-                                diseases 
-                            ON 
-                                patients.diagnosis = diseases.id
-                            WHERE patients.id = :patient_id"
-                            );
+        "SELECT 
+            patients.*, 
+            diseases.mkb_kod mkb_kod, 
+            diseases.name diag_name,
+            diseases.id diag_id,
+            patient_files.file_name,
+            patient_files.file_path
+        FROM 
+            patients 
+        LEFT JOIN 
+            diseases 
+        ON 
+            patients.diagnosis = diseases.id
+        LEFT JOIN 
+            patient_files 
+        ON 
+            patients.id = patient_files.patient_id
+        WHERE patients.id = :patient_id"
+    );
     $stmt->execute([':patient_id' => $id]);
     $patient = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -48,7 +55,7 @@ if (isset($_GET['id'])) {
     <div class="container mt-5">
         <div class="centered-form">
             <h1 class="text-center mb-4">Редактирование карты <?php echo $patient['register_num']; ?></h1>
-            <form action="./php/update.php" method="POST">
+            <form action="./php/update.php" method="POST" enctype="multipart/form-data" id="patientForm">
                 <input type="hidden" name="id" value="<?php echo $patient['id']; ?>">
 
                 <div class="mb-3 input-clear inline-fields">
@@ -89,7 +96,8 @@ if (isset($_GET['id'])) {
                 </div>
                 <div class="mb-3 input-clear">
                     <label for="diagnosis" class="form-label">Диагноз</label>
-                    <select class="form-control" id="diagnosis" name="diagnosis" required>
+                    <select class="form-control" id="diagnosis" name="diagnosis" required
+                    <?php if ($isAdmin == 0) {?> disabled <?php }?>>
                         <option value="<?php echo $patient['diag_id'] ?>"><?php echo $patient['mkb_kod'] . " - " . $patient['diag_name'] ?></option>
                         <?php
                         $diseases_stmt = $conn->query("SELECT * FROM diseases");
@@ -114,16 +122,145 @@ if (isset($_GET['id'])) {
                     <input type="date" class="form-control" id="cancellation_date" name="cancellation_date"
                         value="<?php echo $patient['cancellation_date'] ? date('Y-m-d', $patient['cancellation_date']) : ''; ?>">
                 </div>
+                <div class="mb-3 input-clear">
+                    <label for="patient_file" class="form-label">Файл пациента</label>
+                    <input type="file" class="form-control" id="patient_file" name="patient_file">
+                    <small class="form-text text-muted" id="file-status">
+                        <?php 
+                        if (!empty($patient['file_name']) && !empty($patient['file_path'])) {
+                            echo '<p display="block">Текущий файл: ' . htmlspecialchars($patient['file_name']) . ' </p>';
+                            echo ' <a href="' . htmlspecialchars($patient['file_path']) . '" download="' . htmlspecialchars($patient['file_name']) . '" class="btn btn-sm btn-outline-primary ms-2">Скачать</a>';
+                            if ($isAdmin == 1) {
+                                echo ' <button type="button" class="btn btn-sm btn-outline-danger ms-2" onclick="deletePatientFile(' . $patient['id'] . ')">Удалить файл</button>';
+                            }
+                        } else {
+                            echo "Файл не загружен.";
+                        }
+                        ?>
+                    </small>
+                    <div id="uploadProgress" class="progress mt-2" style="display: none;">
+                        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+                            aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div id="uploadMessage" class="mt-2"></div>
+                </div>
 
                 <div class="button-container">
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button type="submit" class="btn btn-primary" <?php if ($isAdmin == 0) {?> hidden <?php }?>>Сохранить</button>
                     <a href="index.php" class="btn btn-secondary">Вернуться к списку пациентов</a>
                 </div>
             </form>
         </div>
     </div>
+    
+    </div>
+    <div id="uploadMessage" class="text-center mt-2"></div>
 
-    <script src="../js/script.js"></script>
+    <script src="./js/script.js"></script>
+    <script>
+    $(document).ready(function() {
+        <?php if ($isAdmin == 0) { ?>
+            $('input, select').not('#id, #patient_file').prop('disabled', true);
+            $('#confirmed_date, #cancellation_date').off('change');
+        <?php } ?>
+
+        $('#patientForm').on("submit", function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const progressBar = $("#uploadProgress");
+            const progress = progressBar.find(".progress-bar");
+            const message = $("#uploadMessage");
+
+            $.ajax({
+                url: "./php/update.php",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                xhr: function () {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener(
+                        "progress",
+                        function (evt) {
+                            if (evt.lengthComputable) {
+                                var percentComplete = (evt.loaded / evt.total) * 100;
+                                progress.css("width", percentComplete + "%");
+                                progressBar.show();
+                            }
+                        },
+                        false
+                    );
+                    return xhr;
+                },
+                beforeSend: function () {
+                    progressBar.show();
+                    progress.css("width", "0%");
+                    message.text("Загрузка...").css('color', 'black');
+                },
+                success: function (response) {
+                    try {
+                        const res = JSON.parse(response);
+                        if (res.success) {
+                            message.text("Пациент успешно сохранен!").css('color', 'green');
+                            progress.css("width", "100%");
+                            if (formData.get('patient_file') && formData.get('patient_file').size > 0) {
+                                const fileName = formData.get('patient_file').name;
+                                let fileStatus = '<p display="block">Текущий файл: ' + fileName + ' </p>' +
+                                    ' <a href="../uploads/' + fileName + '" download="' + fileName + '" class="btn btn-sm btn-outline-primary ms-2">Скачать</a>';
+                                <?php if ($isAdmin == 1) { ?>
+                                    fileStatus += ' <button type="button" class="btn btn-sm btn-outline-danger ms-2" onclick="deletePatientFile(<?php echo $patient['id']; ?>)">Удалить файл</button>';
+                                <?php } ?>
+                                $('#file-status').html(fileStatus);
+                            }
+                        } else {
+                            message.text(res.error || "Ошибка при сохранении!").css('color', 'red');
+                        }
+                    } catch (e) {
+                        message.text("Ошибка обработки ответа: " + e.message).css('color', 'red');
+                    }
+                },
+                error: function (xhr) {
+                    message.text("Ошибка: " + (xhr.statusText || "неизвестная ошибка")).css('color', 'red');
+                },
+                complete: function () {
+                    setTimeout(() => {
+                        progressBar.hide();
+                        progress.css("width", "0%");
+                        message.text("");
+                    }, 2000);
+                }
+            });
+        });
+    });
+
+    function deletePatientFile(patientId) {
+        if (confirm('Вы уверены, что хотите удалить файл?')) {
+            $.ajax({
+                url: './php/delete_file.php',
+                type: 'POST',
+                data: { patient_id: patientId },
+                success: function(response) {
+                    try {
+                        const res = JSON.parse(response);
+                        if (res.success) {
+                            $('#file-status').html('Файл не загружен.');
+                            $('#uploadMessage').text('Файл успешно удален!').css('color', 'green');
+                            setTimeout(() => $('#uploadMessage').text(''), 2000);
+                        } else {
+                            $('#uploadMessage').text(res.error || 'Ошибка при удалении файла!').css('color', 'red');
+                        }
+                    } catch (e) {
+                        $('#uploadMessage').text('Ошибка обработки ответа: ' + e.message).css('color', 'red');
+                    }
+                },
+                error: function(xhr) {
+                    $('#uploadMessage').text('Ошибка: ' + (xhr.statusText || 'неизвестная ошибка')).css('color', 'red');
+                }
+            });
+        }
+    }
+    </script>
 </body>
 
 </html>

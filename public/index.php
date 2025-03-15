@@ -73,8 +73,8 @@ $patients = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <th>Дата отмены</th>
                     <?php if ($isAdmin == 1): ?>
                         <th>Пользователь</th>
-                        <th>Действия</th>
                     <?php endif; ?>
+                    <th>Действия</th>
                 </tr>
             </thead>
             <tbody>
@@ -88,15 +88,18 @@ $patients = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td><?php echo date('d.m.Y', $row['disease_date']); ?></td>
                 <td><?php echo $row['confirmed_date'] ? date('d.m.Y', $row['confirmed_date']) : ''; ?></td>
                 <td><?php echo $row['cancellation_date'] ? date('d.m.Y', $row['cancellation_date']) : ''; ?></td>
-                <?php if ($isAdmin == 1): ?>
+                <?php if ($isAdmin == 1) { ?>
                     <td><?php echo $row['creator_name']; ?></td>
                     <td>
                         <a href='edit.php?id=<?php echo $row['id']; ?>' class='btn btn-warning btn-sm'>Редактировать</a>
                         <a href='./php/delete.php?id=<?php echo $row['id']; ?>' class='btn btn-danger btn-sm' onclick='return confirm("Вы уверены?")'>Удалить</a>
                     </td>
-                <?php endif; ?>
+                <?php } else {?>
+                    <td>
+                        <a href='edit.php?id=<?php echo $row['id']; ?>&isAdmin=0' class='btn btn-warning btn-sm'>Перейти</a>
+                    </td>
             </tr>
-        <?php endforeach; ?>
+        <?php } endforeach; ?>
             </tbody>
         </table>
     </div>
