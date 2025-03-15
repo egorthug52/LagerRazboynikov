@@ -114,7 +114,7 @@ $(document).ready(() => {
           if (res.success) {
             message.text("Пациент успешно сохранен!");
             progress.css("width", "100%");
-            setTimeout(() => (window.location.href = "index.php"), 2000);
+            setTimeout(() => (window.location.href = "../index.php"), 500);
           } else {
             message.text(res.error || "Ошибка при сохранении!");
           }

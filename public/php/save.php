@@ -11,8 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $register_num = $_POST['register_num'];
     $diagnosis = $_POST['diagnosis'];
     $disease_date = $_POST['disease_date'];
-    $confirmed_date = $_POST['confirmed_date'];
-    $cancellation_date = $_POST['cancellation_date'];
+    $confirmed_date = $_POST['confirmed_date'] ?? null;
+    $cancellation_date = $_POST['cancellation_date'] ?? null;
     $username = $_POST['username'];
     $user_id = $_POST['user_id'];
 
@@ -107,10 +107,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 ':file_path' => $file_path,
                 ':file_name' => $file_name
             ]);
-        }
 
-        echo json_encode(['success' => true]);
-        exit;
+            echo json_encode(['success' => true]);
+            exit;
+        } else {
+            echo json_encode(['success' => true]);
+        }
 
     } catch (PDOException $e) {
         echo json_encode(['error' => 'Ошибка базы данных: ' . $e->getMessage()]);
