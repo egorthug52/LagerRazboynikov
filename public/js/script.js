@@ -9,6 +9,11 @@ $(document).ready(() => {
     allowClear: true,
   });
 
+  $("#user_region").select2({
+    placeholder: "Выберите регион",
+    allowClear: true,
+  });
+
   const toggleFields = () => {
     const isConfirmed = !!confirmedDate.val();
     const isCancelled = !!cancellationDate.val();

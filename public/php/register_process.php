@@ -4,8 +4,12 @@ include '../db/db.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
+    $region = $_POST['user_region'];
+    $firstName = $_POST['first_name'];
+    $lastName = $_POST['last_name'];
+    $middleName = $_POST['middle_name'];
+    $email = $_POST['email'];
 
-    // Проверка, существует ли пользователь
     $stmt = $conn->prepare("SELECT id FROM users WHERE username = :username");
     $stmt->execute([':username' => $username]);
     if ($stmt->fetch()) {
@@ -13,13 +17,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     }
 
-
-    // Добавление нового пользователя
-    $sql = "INSERT INTO users (username, password) VALUES (:username, :password)";
+    $sql = "INSERT INTO users (username, password, user_region, first_name, middle_name, last_name, email) VALUES (:username, :password, :user_region, :first_name, :middle_name, :last_name, :email)";
     $stmt = $conn->prepare($sql);
     $stmt->execute([
         ':username' => $username,
-        ':password' => $password
+        ':password' => $password,
+        ':user_region' => $region,
+        ':first_name' => $firstName,
+        ':middle_name' => $middleName,
+        ':last_name' => $lastName,
+        ':email' => $email,
     ]);
 
     header("Location: ../login.php");

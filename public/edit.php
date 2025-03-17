@@ -160,7 +160,7 @@ if (isset($_GET['id'])) {
     <script>
     $(document).ready(function() {
         <?php if ($isAdmin == 0) { ?>
-            $('input, select').not('#id, #patient_file').prop('disabled', true);
+            $('input, select').not('#id').prop('disabled', true);
             $('#confirmed_date, #cancellation_date').off('change');
         <?php } ?>
 
