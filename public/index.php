@@ -8,11 +8,15 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
-$user_stmt = $conn->prepare("SELECT isAdmin FROM users WHERE id = :user_id");
+$user_stmt = $conn->prepare("SELECT isAdmin, superuser, first_name, last_name, middle_name FROM users WHERE id = :user_id");
 $user_stmt->execute(['user_id' => $user_id]);
 $user = $user_stmt->fetch(PDO::FETCH_ASSOC);
 
 $isAdmin = $user['isAdmin'] ?? 0;
+$superuser = $user['superuser'] ?? 0;
+$userFirstName = $user['first_name'] ?? '';
+$userLastName = $user['last_name'] ?? '';
+$userMiddleName = $user['middle_name'] ?? '';
 
 $sql = "
 SELECT 
@@ -55,7 +59,8 @@ $patients = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h1 class="text-center">Список пациентов</h1>
             <div>
-                <span>Вы вошли как <strong><?php echo $_SESSION['username']; ?></strong></span>
+                <span>Вы вошли как <strong><?php echo $userLastName . " " . $userFirstName . " " . $userMiddleName ?></strong></span>
+                <?php echo $superuser == 1 ? '<a href="./admin_panel.php" class="btn btn-primary ms-3">Администратор</a>' : null ?>
                 <a href="./php/logout.php" class="btn btn-danger ms-3">Выйти</a>
             </div>
         </div>
