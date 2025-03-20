@@ -4,14 +4,22 @@ $(document).ready(() => {
   const cancellationDate = $("#cancellation_date");
   const form = $("#patientForm");
 
-  $("#diagnosis").select2({
-    placeholder: "Выберите диагноз",
+  const select2Options = {
+    placeholder: "Выберите значение",
     allowClear: true,
+  };
+
+  $("#diagnosis").select2({
+    ...select2Options,
+    allowClear: false,
+    placeholder: "Выберите диагноз",
   });
 
-  $("#user_region").select2({
+  $(".user_region").select2({
+    ...select2Options,
+    allowClear: false,
     placeholder: "Выберите регион",
-    allowClear: true,
+    width: "200px"
   });
 
   const toggleFields = () => {
@@ -74,4 +82,65 @@ $(document).ready(() => {
   });
 
   toggleFields();
+
+  $(document).ready(() => {
+    $(".save-btn").on("click", function () {
+      const $row = $(this).closest("tr");
+      const userId = $row.data("user-id");
+      const updatedData = {};
+
+      $row.find('td[contenteditable="true"]').each(function () {
+        const $cell = $(this);
+        const field = $cell.data("field");
+        let value = $cell.text().trim();
+
+        if (field === "isAdmin") {
+          value = value === "Администратор" ? 1 : 0;
+        } else if (field === "superuser") {
+          value = value === "Суперюзер" ? 1 : 0;
+        } else if (field === "full_name") {
+          const [last_name, first_name, middle_name] = value
+            .split(" ")
+            .filter(Boolean);
+          updatedData["last_name"] = last_name || "";
+          updatedData["first_name"] = first_name || "";
+          updatedData["middle_name"] = middle_name || "";
+        } else {
+          updatedData[field] = value;
+        }
+      });
+
+      $.ajax({
+        url: "./php/update_user.php",
+        method: "POST",
+        data: {
+          user_id: userId,
+          ...updatedData,
+        },
+        success: function (response) {
+          try {
+            const result = JSON.parse(response);
+            if (result.success) {
+              alert("Данные успешно обновлены!");
+            } else {
+              alert("Ошибка: " + result.message);
+            }
+          } catch (e) {
+            alert("Ошибка при обработке ответа сервера");
+          }
+        },
+        error: function () {
+          alert("Ошибка связи с сервером");
+        },
+      });
+    });
+
+    $('td[contenteditable="true"]')
+      .on("focus", function () {
+        $(this).css("background-color", "#fff3cd");
+      })
+      .on("blur", function () {
+        $(this).css("background-color", "rgba(255, 255, 255, 0.7)");
+      });
+  });
 });
