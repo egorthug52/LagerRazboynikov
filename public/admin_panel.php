@@ -3,7 +3,7 @@ include './db/db.php';
 
 session_start();
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: logout.php");
     exit;
 }
 
@@ -76,36 +76,33 @@ $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <td contenteditable="false" data-field="full_name">
                             <?php echo "{$user_row['last_name']} {$user_row['first_name']} {$user_row['middle_name']}"; ?>
                         </td>
-                        <td contenteditable="true" data-field="email"><?php echo $user_row['email']; ?></td>
-                        <td contenteditable="true" data-field="user_region">
-                            <select class="form-control user_region" name="user_region_<?php echo $user_row['id']; ?>" required>
-                                <?php
-                                $stmt = $conn->query("SELECT * FROM regions");
-                                while ($region_row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                    $selected = ($region_row['region_code'] == $user_row['user_region']) ? 'selected' : '';
-                                    echo '<option value="' . $region_row['region_code'] . '" ' . $selected . '>' . $region_row['region_name'] . '</option>';
+                        <td contenteditable="false" data-field="email"><?php echo $user_row['email']; ?></td>
+                        <td contenteditable="false" data-field="user_region" style="width: 200px">
+                            <?php
+                            $stmt = $conn->query("SELECT * FROM regions");
+                            while ($region_row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                if ($region_row['region_code'] == $user_row['user_region']) {
+                                    echo $region_row['region_name'];
+                                    break;
                                 }
-                                ?>
-                            </select>
+                            }
+                            ?>
                         </td>
-                        <td contenteditable="true" data-field="isAdmin">
-                            <select data-field="isAdmin" class="form-select form-select-sm">
-                                <option value="0" <?php echo $user_row['isAdmin'] == 0 ? 'selected' : ''; ?>>Сотрудник
-                                </option>
-                                <option value="1" <?php echo $user_row['isAdmin'] == 1 ? 'selected' : ''; ?>>Администратор
-                                </option>
-                            </select>
+                        <td contenteditable="false" data-field="isAdmin">
+                            <?php
+                            echo $user_row['isAdmin'] == 0 ? 'Нет' : 'Да';
+                            ?>
                         </td>
-                        <td contenteditable="true" data-field="superuser">
-                            <select data-field="superuser" class="form-select form-select-sm">
-                                <option value="0" <?php echo $user_row['superuser'] == 0 ? 'selected' : ''; ?>>Сотрудник
-                                </option>
-                                <option value="1" <?php echo $user_row['superuser'] == 1 ? 'selected' : ''; ?>>Администратор
-                                </option>
-                            </select>
+                        <td contenteditable="false" data-field="superuser">
+                            <?php
+                            echo $user_row['superuser'] == 0 ? 'Нет' : 'Да';
+                            ?>
                         </td>
                         <td><?php echo $user_row['created_at']; ?></td>
-                        <td><button type="submit" class='btn btn-warning btn-sm'>Сохранить</button></td>
+                        <td>
+                            <a href='edit_user.php?id=<?php echo $user_row['id']; ?>' class='btn btn-warning btn-sm'>Редактировать</a>
+                            <a href='./php/delete_user.php?id=<?php echo $user_row['id']; ?>' class='btn btn-danger btn-sm' onclick='return confirm("Вы уверены?")'>Удалить</a>
+                        </td>
                     <?php endforeach; ?>
             </tbody>
         </table>

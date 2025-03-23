@@ -19,6 +19,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <title>Добавить пациента</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./css/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -113,68 +114,68 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
     <script src="./js/script.js"></script>
     <script>
         form.on("submit", function (e) {
-        e.preventDefault();
+            e.preventDefault();
 
-        const formData = new FormData(this);
-        for (let pair of formData.entries()) {
-        console.log(pair[0] + ": " + pair[1]);
-        }
-
-        const progressBar = $("#uploadProgress");
-        const progress = progressBar.find(".progress-bar");
-        const message = $("#uploadMessage");
-
-        $.ajax({
-        url: "./php/save.php",
-        type: "POST",
-        data: formData,
-        processData: false,
-        contentType: false,
-        xhr: function () {
-            var xhr = new window.XMLHttpRequest();
-            xhr.upload.addEventListener(
-            "progress",
-            function (evt) {
-                if (evt.lengthComputable) {
-                var percentComplete = (evt.loaded / evt.total) * 100;
-                progress.css("width", percentComplete + "%");
-                progressBar.show();
-                }
-            },
-            false
-            );
-            return xhr;
-        },
-        beforeSend: function () {
-            progressBar.show();
-            progress.css("width", "0%");
-            message.text("Загрузка...");
-        },
-        success: function (response) {
-            try {
-            const res = JSON.parse(response);
-            if (res.success) {
-                message.text("Пациент успешно сохранен!");
-                progress.css("width", "100%");
-                setTimeout(() => (window.location.href = "../index.php"), 500);
-            } else {
-                message.text(res.error || "Ошибка при сохранении!");
+            const formData = new FormData(this);
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ": " + pair[1]);
             }
-            } catch (e) {
-            message.text("Ошибка обработки ответа: " + e.message);
-            }
-        },
-        error: function (xhr) {
-            message.text("Ошибка: " + (xhr.statusText || "неизвестная ошибка"));
-        },
-        complete: function () {
-            setTimeout(() => {
-            progressBar.hide();
-            progress.css("width", "0%");
-            }, 2000);
-        },
+
+            const progressBar = $("#uploadProgress");
+            const progress = progressBar.find(".progress-bar");
+            const message = $("#uploadMessage");
+
+            $.ajax({
+                url: "./php/save.php",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                xhr: function () {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener(
+                        "progress",
+                        function (evt) {
+                            if (evt.lengthComputable) {
+                                var percentComplete = (evt.loaded / evt.total) * 100;
+                                progress.css("width", percentComplete + "%");
+                                progressBar.show();
+                            }
+                        },
+                        false
+                    );
+                    return xhr;
+                },
+                beforeSend: function () {
+                    progressBar.show();
+                    progress.css("width", "0%");
+                    message.text("Загрузка...");
+                },
+                success: function (response) {
+                    try {
+                        const res = JSON.parse(response);
+                        if (res.success) {
+                            message.text("Пациент успешно сохранен!");
+                            progress.css("width", "100%");
+                            setTimeout(() => (window.location.href = "../index.php"), 500);
+                        } else {
+                            message.text(res.error || "Ошибка при сохранении!");
+                        }
+                    } catch (e) {
+                        message.text("Ошибка обработки ответа: " + e.message);
+                    }
+                },
+                error: function (xhr) {
+                    message.text("Ошибка: " + (xhr.statusText || "неизвестная ошибка"));
+                },
+                complete: function () {
+                    setTimeout(() => {
+                        progressBar.hide();
+                        progress.css("width", "0%");
+                    }, 2000);
+                },
+            });
         });
-    });
     </script>
 </body>
 

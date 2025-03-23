@@ -13,13 +13,15 @@ $(document).ready(() => {
     ...select2Options,
     allowClear: false,
     placeholder: "Выберите диагноз",
+    theme: "bootstrap-5"
   });
 
-  $(".user_region").select2({
+  $("#user_region").select2({
     ...select2Options,
     allowClear: false,
     placeholder: "Выберите регион",
-    width: "200px"
+    theme: "bootstrap-5",
+    width: "250px",
   });
 
   const toggleFields = () => {
@@ -143,4 +145,39 @@ $(document).ready(() => {
         $(this).css("background-color", "rgba(255, 255, 255, 0.7)");
       });
   });
+
+  $('#userForm').on('submit', function(event) {
+    event.preventDefault();
+  
+    const formData = new FormData(this);
+    const xhr = new XMLHttpRequest();
+  
+    xhr.open('POST', './php/update_user.php', true);
+
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+          try {
+              const response = JSON.parse(xhr.responseText);
+              if (response.status === 'success') {
+                  $('#uploadMessage').html('<div class="alert alert-success">' + response.message + '</div>');
+              } else {
+                  $('#uploadMessage').html('<div class="alert alert-danger">' + response.message + '</div>');
+              }
+              setTimeout(function() {
+                  $('#uploadMessage').html('');
+              }, 5000);
+          } catch (e) {
+              $('#uploadMessage').html('<div class="alert alert-danger">Ошибка обработки ответа: ' + e.message + '</div>');
+          }
+      } else {
+          $('#uploadMessage').html('<div class="alert alert-danger">Ошибка сервера: ' + xhr.status + ' - ' + xhr.statusText + '</div>');
+      }
+  };
+
+    xhr.onerror = function() {
+      $('#uploadMessage').html('<div class="alert alert-danger">Ошибка сети. Проверьте подключение.</div>');
+    };
+    
+    xhr.send(formData);
+  })
 });

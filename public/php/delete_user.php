@@ -5,7 +5,7 @@ if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
     try {
-        $sql = "DELETE FROM patients WHERE id = :id";
+        $sql = "DELETE FROM users WHERE id = :id";
         $stmt = $conn->prepare($sql);
         $stmt->execute([':id' => $id]);
 
@@ -21,6 +21,6 @@ if (isset($_GET['id'])) {
     echo "ID записи не указан.";
 }
 
-header("Location: ../index.php");
+header("Location: ../admin_panel.php");
 exit;
 ?>

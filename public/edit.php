@@ -45,6 +45,7 @@ if (isset($_GET['id'])) {
     <meta charset="UTF-8">
     <title>Редактировать пациента</title>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -144,7 +145,7 @@ if (isset($_GET['id'])) {
                     </div>
                     <div id="uploadMessage" class="mt-2"></div>
                 </div>
-
+                <div id="uploadMessage" class="text-center mt-2"></div>
                 <div class="button-container">
                     <button type="submit" class="btn btn-primary" <?php if ($isAdmin == 0) {?> hidden <?php }?>>Сохранить</button>
                     <a href="index.php" class="btn btn-secondary">Вернуться к списку пациентов</a>
@@ -154,7 +155,7 @@ if (isset($_GET['id'])) {
     </div>
     
     </div>
-    <div id="uploadMessage" class="text-center mt-2"></div>
+    
 
     <script src="./js/script.js"></script>
     <script>

@@ -42,7 +42,7 @@ body {
 
 .inline-fields {
     display: flex;
-    gap: 10px;
+    gap: 30px;
 }
 
 .inline-fields .form-control {
@@ -53,9 +53,4 @@ body {
     display: flex;
     gap: 10px;
     margin-top: 20px;
-}
-
-.user-region {
-    width: 100% !important;
-    max-width: 200px;
 }
