@@ -1,4 +1,6 @@
 <?php
+
+use Dom\Text;
 include '../db/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -15,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $cancellation_date = $_POST['cancellation_date'] ?? null;
     $username = $_POST['username'];
     $user_id = $_POST['user_id'];
+    $user_region = $_POST['user_region'];
 
     $disease_time = strtotime($disease_date);
     if ($disease_time === false) {
@@ -31,10 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
         $sql = "INSERT INTO patients (
                     first_name, middle_name, last_name, phone_number, insurance_num, age, register_num, 
-                    diagnosis, disease_date, confirmed_date, cancellation_date, first_name_char, middle_name_char, last_name_char, creator_id, creator_name
+                    diagnosis, disease_date, confirmed_date, cancellation_date, first_name_char, middle_name_char, last_name_char, creator_id, creator_name, region
                 ) VALUES (
                     :first_name, :middle_name, :last_name, :phone_number, :insurance_num, :age, :register_num, 
-                    :diagnosis, :disease_date, :confirmed_date, :cancellation_date, :first_name_char, :middle_name_char, :last_name_char, :creator_id, :creator_name
+                    :diagnosis, :disease_date, :confirmed_date, :cancellation_date, :first_name_char, :middle_name_char, :last_name_char, :creator_id, :creator_name, :user_region
                 )";
         $stmt = $conn->prepare($sql);
         $stmt->execute([
@@ -54,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             ':last_name_char' => $last_name_char,
             ':creator_id' => (int)$user_id,
             ':creator_name' => $username,
+            ':user_region' => $user_region
         ]);
 
         $patient_id = $conn->lastInsertId();

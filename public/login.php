@@ -22,7 +22,6 @@
             </div>
             <button type="submit" class="btn btn-primary">Войти</button>
         </form>
-        <p class="mt-3">Нет аккаунта? <a href="register.php">Зарегистрируйтесь</a></p>
     </div>
 </body>
 </html>

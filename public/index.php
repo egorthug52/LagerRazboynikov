@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
-$user_stmt = $conn->prepare("SELECT isAdmin, superuser, first_name, last_name, middle_name FROM users WHERE id = :user_id");
+$user_stmt = $conn->prepare("SELECT isAdmin, superuser, first_name, last_name, middle_name, user_region FROM users WHERE id = :user_id");
 $user_stmt->execute(['user_id' => $user_id]);
 $user = $user_stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -17,6 +17,7 @@ $superuser = $user['superuser'] ?? 0;
 $userFirstName = $user['first_name'] ?? '';
 $userLastName = $user['last_name'] ?? '';
 $userMiddleName = $user['middle_name'] ?? '';
+$userRegion = $user['user_region']?? '';
 
 $sql = "
 SELECT 
@@ -33,11 +34,15 @@ ON
 
 if ($isAdmin != 1) {
     $sql .= " WHERE patients.creator_id = :user_id";
+} elseif ($superuser != 1) {
+    $sql .= " WHERE patients.region = :user_region or patients.creator_id = :user_id";
 }
 
 $stmt = $conn->prepare($sql);
 if ($isAdmin != 1) {
     $stmt->execute([':user_id' => $user_id]);
+} elseif ($superuser != 1) {
+    $stmt->execute([':user_region' => $userRegion, ':user_id' => $user_id]);
 } else {
     $stmt->execute();
 }

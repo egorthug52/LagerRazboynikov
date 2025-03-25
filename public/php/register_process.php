@@ -29,6 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ':email' => $email,
     ]);
 
-    header("Location: ../login.php");
+    header("Location: ../admin_panel.php");
 }
 ?>

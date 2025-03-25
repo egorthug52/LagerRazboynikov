@@ -21,7 +21,7 @@ $(document).ready(() => {
     allowClear: false,
     placeholder: "Выберите регион",
     theme: "bootstrap-5",
-    width: "250px",
+    width: "100%",
   });
 
   const toggleFields = () => {

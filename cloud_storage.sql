@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: MariaDB-10.3
--- Время создания: Янв 27 2025 г., 21:13
+-- Время создания: Мар 25 2025 г., 19:42
 -- Версия сервера: 10.3.39-MariaDB
 -- Версия PHP: 8.1.28
 
@@ -71,30 +71,153 @@ CREATE TABLE `patients` (
   `id` int(11) NOT NULL,
   `phone_number` varchar(15) NOT NULL,
   `first_name` varchar(50) NOT NULL,
-  `middle_name` varchar(50) NOT NULL,
+  `middle_name` varchar(50) DEFAULT NULL,
   `last_name` varchar(50) DEFAULT NULL,
   `insurance_num` varchar(255) NOT NULL,
   `first_name_char` text NOT NULL,
-  `middle_name_char` text NOT NULL,
+  `middle_name_char` text DEFAULT NULL,
   `last_name_char` text NOT NULL,
   `age` tinyint(4) NOT NULL,
   `register_num` varchar(255) NOT NULL,
   `diagnosis` int(11) NOT NULL,
-  `confirmed_date` int(11) DEFAULT NULL,
-  `cancellation_date` int(11) DEFAULT NULL,
-  `disease_date` int(11) NOT NULL,
+  `confirmed_date` int(20) DEFAULT NULL,
+  `cancellation_date` int(20) DEFAULT NULL,
+  `disease_date` int(20) NOT NULL,
   `creation_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `creator_id` int(11) NOT NULL,
-  `creator_name` varchar(255) NOT NULL
+  `creator_name` varchar(255) NOT NULL,
+  `region` varchar(3) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Дамп данных таблицы `patients`
 --
 
-INSERT INTO `patients` (`id`, `phone_number`, `first_name`, `middle_name`, `last_name`, `insurance_num`, `first_name_char`, `middle_name_char`, `last_name_char`, `age`, `register_num`, `diagnosis`, `confirmed_date`, `cancellation_date`, `disease_date`, `creation_date`, `creator_id`, `creator_name`) VALUES
-(16, '+73223423432', 'Shamann', '', 'Goldenboy', '12312', 'S**', '**', 'G**', 12, 'ssad', 13, 1737147600, NULL, 1737061200, '2025-01-26 17:08:23', 3, '123'),
-(17, '+74123412341', 'Shamann', '', 'Goldenboy', '12341234123', 'S**', '**', 'G**', 12, '234324', 17, NULL, 1737234000, 1737061200, '2025-01-26 17:26:13', 4, '321');
+INSERT INTO `patients` (`id`, `phone_number`, `first_name`, `middle_name`, `last_name`, `insurance_num`, `first_name_char`, `middle_name_char`, `last_name_char`, `age`, `register_num`, `diagnosis`, `confirmed_date`, `cancellation_date`, `disease_date`, `creation_date`, `creator_id`, `creator_name`, `region`) VALUES
+(49, '+71234123412', 'Sdfgsd', 'Sdfg', 'Sdfg', '3242134', 'S**', 'S**', 'S**', 12, '43225435', 17, 1742504400, NULL, 1741640400, '2025-03-25 16:36:48', 6, '321', '77'),
+(50, '+73425324523', 'Dfsgv', 'Zxcv', 'Zxcv', '435345435', 'D**', 'Z**', 'Z**', 23, '3244325', 19, 1742504400, NULL, 1741640400, '2025-03-25 16:37:34', 8, '234', '22');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `patient_files`
+--
+
+CREATE TABLE `patient_files` (
+  `id` int(11) NOT NULL,
+  `patient_id` int(11) NOT NULL,
+  `file_path` varchar(255) NOT NULL,
+  `file_name` varchar(255) NOT NULL,
+  `upload_date` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `regions`
+--
+
+CREATE TABLE `regions` (
+  `id` int(11) NOT NULL,
+  `region_name` varchar(100) NOT NULL,
+  `region_code` varchar(3) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `regions`
+--
+
+INSERT INTO `regions` (`id`, `region_name`, `region_code`, `created_at`) VALUES
+(1, 'Алтайский край', '22', '2025-03-16 08:10:29'),
+(2, 'Амурская область', '28', '2025-03-16 08:10:29'),
+(3, 'Архангельская область', '29', '2025-03-16 08:10:29'),
+(4, 'Астраханская область', '30', '2025-03-16 08:10:29'),
+(5, 'Белгородская область', '31', '2025-03-16 08:10:29'),
+(6, 'Брянская область', '32', '2025-03-16 08:10:29'),
+(7, 'Владимирская область', '33', '2025-03-16 08:10:29'),
+(8, 'Волгоградская область', '34', '2025-03-16 08:10:29'),
+(9, 'Вологодская область', '35', '2025-03-16 08:10:29'),
+(10, 'Воронежская область', '36', '2025-03-16 08:10:29'),
+(11, 'г. Москва', '77', '2025-03-16 08:10:29'),
+(12, 'г. Санкт-Петербург', '78', '2025-03-16 08:10:29'),
+(13, 'г. Севастополь', '92', '2025-03-16 08:10:29'),
+(14, 'Донецкая Народная Республика', '80', '2025-03-16 08:10:29'),
+(15, 'Еврейская автономная область', '79', '2025-03-16 08:10:29'),
+(16, 'Забайкальский край', '75', '2025-03-16 08:10:29'),
+(17, 'Запорожская область', '85', '2025-03-16 08:10:29'),
+(18, 'Ивановская область', '37', '2025-03-16 08:10:29'),
+(19, 'Иркутская область', '38', '2025-03-16 08:10:29'),
+(20, 'Кабардино-Балкарская Республика', '07', '2025-03-16 08:10:29'),
+(21, 'Калининградская область', '39', '2025-03-16 08:10:29'),
+(22, 'Калужская область', '40', '2025-03-16 08:10:29'),
+(23, 'Камчатский край', '41', '2025-03-16 08:10:29'),
+(24, 'Карачаево-Черкесская Республика', '09', '2025-03-16 08:10:29'),
+(25, 'Кемеровская область', '42', '2025-03-16 08:10:29'),
+(26, 'Кировская область', '43', '2025-03-16 08:10:29'),
+(27, 'Костромская область', '44', '2025-03-16 08:10:29'),
+(28, 'Краснодарский край', '23', '2025-03-16 08:10:29'),
+(29, 'Красноярский край', '24', '2025-03-16 08:10:29'),
+(30, 'Курганская область', '45', '2025-03-16 08:10:29'),
+(31, 'Курская область', '46', '2025-03-16 08:10:29'),
+(32, 'Ленинградская область', '47', '2025-03-16 08:10:29'),
+(33, 'Липецкая область', '48', '2025-03-16 08:10:29'),
+(34, 'Луганская Народная Республика', '81', '2025-03-16 08:10:29'),
+(35, 'Магаданская область', '49', '2025-03-16 08:10:29'),
+(36, 'Московская область', '50', '2025-03-16 08:10:29'),
+(37, 'Мурманская область', '51', '2025-03-16 08:10:29'),
+(38, 'Ненецкий автономный округ', '83', '2025-03-16 08:10:29'),
+(39, 'Нижегородская область', '52', '2025-03-16 08:10:29'),
+(40, 'Новгородская область', '53', '2025-03-16 08:10:29'),
+(41, 'Новосибирская область', '54', '2025-03-16 08:10:29'),
+(42, 'Омская область', '55', '2025-03-16 08:10:29'),
+(43, 'Оренбургская область', '56', '2025-03-16 08:10:29'),
+(44, 'Орловская область', '57', '2025-03-16 08:10:29'),
+(45, 'Пензенская область', '58', '2025-03-16 08:10:29'),
+(46, 'Пермский край', '59', '2025-03-16 08:10:29'),
+(47, 'Приморский край', '25', '2025-03-16 08:10:29'),
+(48, 'Псковская область', '60', '2025-03-16 08:10:29'),
+(49, 'Республика Адыгея', '01', '2025-03-16 08:10:29'),
+(50, 'Республика Алтай', '04', '2025-03-16 08:10:29'),
+(51, 'Республика Башкортостан', '02', '2025-03-16 08:10:29'),
+(52, 'Республика Бурятия', '03', '2025-03-16 08:10:29'),
+(53, 'Республика Дагестан', '05', '2025-03-16 08:10:29'),
+(54, 'Республика Ингушетия', '06', '2025-03-16 08:10:29'),
+(55, 'Республика Калмыкия', '08', '2025-03-16 08:10:29'),
+(56, 'Республика Карелия', '10', '2025-03-16 08:10:29'),
+(57, 'Республика Коми', '11', '2025-03-16 08:10:29'),
+(58, 'Республика Крым', '82', '2025-03-16 08:10:29'),
+(59, 'Республика Марий Эл', '12', '2025-03-16 08:10:29'),
+(60, 'Республика Мордовия', '13', '2025-03-16 08:10:29'),
+(61, 'Республика Саха (Якутия)', '14', '2025-03-16 08:10:29'),
+(62, 'Республика Северная Осетия — Алания', '15', '2025-03-16 08:10:29'),
+(63, 'Республика Татарстан', '16', '2025-03-16 08:10:29'),
+(64, 'Республика Тыва', '17', '2025-03-16 08:10:29'),
+(65, 'Республика Хакасия', '19', '2025-03-16 08:10:29'),
+(66, 'Ростовская область', '61', '2025-03-16 08:10:29'),
+(67, 'Рязанская область', '62', '2025-03-16 08:10:29'),
+(68, 'Самарская область', '63', '2025-03-16 08:10:29'),
+(69, 'Саратовская область', '64', '2025-03-16 08:10:29'),
+(70, 'Сахалинская область', '65', '2025-03-16 08:10:29'),
+(71, 'Свердловская область', '66', '2025-03-16 08:10:29'),
+(72, 'Смоленская область', '67', '2025-03-16 08:10:29'),
+(73, 'Ставропольский край', '26', '2025-03-16 08:10:29'),
+(74, 'Тамбовская область', '68', '2025-03-16 08:10:29'),
+(75, 'Тверская область', '69', '2025-03-16 08:10:29'),
+(76, 'Томская область', '70', '2025-03-16 08:10:29'),
+(77, 'Тульская область', '71', '2025-03-16 08:10:29'),
+(78, 'Тюменская область', '72', '2025-03-16 08:10:29'),
+(79, 'Удмуртская Республика', '18', '2025-03-16 08:10:29'),
+(80, 'Ульяновская область', '73', '2025-03-16 08:10:29'),
+(81, 'Хабаровский край', '27', '2025-03-16 08:10:29'),
+(82, 'Ханты-Мансийский автономный округ — Югра', '86', '2025-03-16 08:10:29'),
+(83, 'Херсонская область', '84', '2025-03-16 08:10:29'),
+(84, 'Челябинская область', '74', '2025-03-16 08:10:29'),
+(85, 'Чеченская Республика', '95', '2025-03-16 08:10:29'),
+(86, 'Чувашская Республика', '21', '2025-03-16 08:10:29'),
+(87, 'Чукотский автономный округ', '87', '2025-03-16 08:10:29'),
+(88, 'Ямало-Ненецкий автономный округ', '89', '2025-03-16 08:10:29'),
+(89, 'Ярославская область', '76', '2025-03-16 08:10:29');
 
 -- --------------------------------------------------------
 
@@ -107,17 +230,23 @@ CREATE TABLE `users` (
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `isAdmin` tinyint(1) NOT NULL DEFAULT 0
+  `isAdmin` tinyint(1) NOT NULL DEFAULT 0,
+  `superuser` tinyint(1) NOT NULL DEFAULT 0,
+  `user_region` varchar(3) NOT NULL,
+  `first_name` varchar(30) NOT NULL,
+  `middle_name` varchar(30) DEFAULT NULL,
+  `last_name` varchar(30) NOT NULL,
+  `email` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Дамп данных таблицы `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `created_at`, `isAdmin`) VALUES
-(2, 'root', '$2y$10$QKw5bZXSDOmVdL3nVPs5cOjip4dnf/1pe6r2EDTNmcMmyRSxf6LEm', '2024-12-26 17:43:11', 0),
-(3, '123', '$2y$10$C3WRE/mzUsMxEC4opc5Cxu1vyoLRTagdV.U4Ce8GwBV7/bHeloHwy', '2025-01-03 11:09:20', 1),
-(4, '321', '$2y$10$kHtu/w5ow0G14dxc61XADepg.chzqb6vDVjRQcUy.zsiNGxKpF0xS', '2025-01-07 13:24:33', 0);
+INSERT INTO `users` (`id`, `username`, `password`, `created_at`, `isAdmin`, `superuser`, `user_region`, `first_name`, `middle_name`, `last_name`, `email`) VALUES
+(5, '123', '$2y$10$DizqDX1gIL/6e5dBJgjof.1DlB4DXyQ9mU8x78PVbXSwVYewbf0Si', '2025-03-16 08:31:53', 1, 1, '77', 'Имя', 'Отчество', 'Фамилия', 'terewgdfsgbdsfbst@mail.com'),
+(6, '321', '$2y$10$laomIgqVpiSmyPPn2Cfzb.c2NP9PZ1183ZBfwEMSormfLLvYSZbMW', '2025-03-17 17:54:00', 1, 0, '22', 'Тестовый', 'Региональный', 'Админ', 'hjlj@gasldj.asd'),
+(8, '234', '$2y$10$2QuGqyx.N3v6r/J3.ZcS1.RJ.txt2GdNkOPxk67Z3VzQlxWMA7Hle', '2025-03-25 16:30:25', 0, 0, '22', 'Fasdf', 'Asdf', 'Sdfg', 'sdfg@gfdas.consda');
 
 --
 -- Индексы сохранённых таблиц
@@ -141,6 +270,20 @@ ALTER TABLE `patients`
   ADD KEY `creator_name` (`creator_name`);
 
 --
+-- Индексы таблицы `patient_files`
+--
+ALTER TABLE `patient_files`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `file_path` (`file_path`) USING BTREE,
+  ADD KEY `patient_id` (`patient_id`);
+
+--
+-- Индексы таблицы `regions`
+--
+ALTER TABLE `regions`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Индексы таблицы `users`
 --
 ALTER TABLE `users`
@@ -161,13 +304,25 @@ ALTER TABLE `diseases`
 -- AUTO_INCREMENT для таблицы `patients`
 --
 ALTER TABLE `patients`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+
+--
+-- AUTO_INCREMENT для таблицы `patient_files`
+--
+ALTER TABLE `patient_files`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+
+--
+-- AUTO_INCREMENT для таблицы `regions`
+--
+ALTER TABLE `regions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
 
 --
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
@@ -177,9 +332,13 @@ ALTER TABLE `users`
 -- Ограничения внешнего ключа таблицы `patients`
 --
 ALTER TABLE `patients`
-  ADD CONSTRAINT `patients_ibfk_1` FOREIGN KEY (`diagnosis`) REFERENCES `diseases` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `patients_ibfk_2` FOREIGN KEY (`creator_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `patients_ibfk_3` FOREIGN KEY (`creator_name`) REFERENCES `users` (`username`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `patients_ibfk_1` FOREIGN KEY (`diagnosis`) REFERENCES `diseases` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Ограничения внешнего ключа таблицы `patient_files`
+--
+ALTER TABLE `patient_files`
+  ADD CONSTRAINT `patient_files_ibfk_1` FOREIGN KEY (`patient_id`) REFERENCES `patients` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

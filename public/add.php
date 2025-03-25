@@ -33,6 +33,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
             <form action="./php/save.php" method="POST" id="patientForm" enctype="multipart/form-data">
                 <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
                 <input type="hidden" name="username" value="<?php echo $user['username']; ?>">
+                <input type="hidden" name="user_region" value="<?php echo $user['user_region']; ?>">
                 <div class="mb-3 input-clear">
                     <label for="register_num" class="form-label">Регистрационный номер</label>
                     <input type="text" class="form-control" id="register_num" name="register_num" required>

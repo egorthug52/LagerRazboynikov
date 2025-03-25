@@ -55,7 +55,7 @@ $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <a href="./php/logout.php" class="btn btn-danger ms-3">Выйти</a>
             </div>
         </div>
-        <a href="add.php" class="btn btn-primary mb-3">Зарегистрировать сотрудника</a>
+        <a href="register.php" class="btn btn-primary mb-3">Зарегистрировать сотрудника</a>
         <table class="table table-bordered">
             <thead>
                 <tr>

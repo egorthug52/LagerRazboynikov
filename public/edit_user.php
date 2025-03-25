@@ -85,7 +85,7 @@ if (isset($_GET['id'])) {
                         <input type="text" class="form-control" id="email" name="email"
                             value="<?php echo $user['email']; ?>" required>
                     </div>
-                    <div class="mb-3 input-clear">
+                    <div class="mb-3 input-clear" style="width: 300px;">
                         <label for="user_region" class="form-label">Регион</label>
                         <select class="form-control" id="user_region" name="user_region" required <?php if ($isAdmin == 0) { ?>
                             disabled <?php } ?>>
@@ -122,14 +122,13 @@ if (isset($_GET['id'])) {
                 
                 <div class="button-container">
                     <button type="submit" class="btn btn-primary">Сохранить</button>
-                    <a href="./admin_panel.php" class="btn btn-secondary">Вернуться к списку пациентов</a>
+                    <a href="./admin_panel.php" class="btn btn-secondary">Вернуться к списку сотрудников</a>
                 </div>
             </form>
         </div>
     </div>
 
     </div>
-
     <script src="./js/script.js"></script>
 </body>
 
