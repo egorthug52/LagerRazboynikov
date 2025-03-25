@@ -19,7 +19,8 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <title>Добавить пациента</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"
+        rel="stylesheet">
     <link rel="stylesheet" href="./css/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -30,7 +31,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
     <div class="container mt-5">
         <div class="centered-form">
             <h1 class="text-center mb-4">Добавить пациента</h1>
-            <form action="./php/save.php" method="POST" id="patientForm" enctype="multipart/form-data">
+            <form method="POST" id="patientForm" enctype="multipart/form-data">
                 <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
                 <input type="hidden" name="username" value="<?php echo $user['username']; ?>">
                 <input type="hidden" name="user_region" value="<?php echo $user['user_region']; ?>">
@@ -114,7 +115,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     <script src="./js/script.js"></script>
     <script>
-        form.on("submit", function (e) {
+        $("#patientForm").on("submit", function (e) {
             e.preventDefault();
 
             const formData = new FormData(this);
@@ -153,17 +154,12 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                     message.text("Загрузка...");
                 },
                 success: function (response) {
-                    try {
-                        const res = JSON.parse(response);
-                        if (res.success) {
-                            message.text("Пациент успешно сохранен!");
-                            progress.css("width", "100%");
-                            setTimeout(() => (window.location.href = "../index.php"), 500);
-                        } else {
-                            message.text(res.error || "Ошибка при сохранении!");
-                        }
-                    } catch (e) {
-                        message.text("Ошибка обработки ответа: " + e.message);
+                    if (response.status === "success") {
+                        message.text("Пациент успешно сохранен!");
+                        progress.css("width", "100%");
+                        setTimeout(() => (window.location.href = "../index.php"), 500);
+                    } else {
+                        message.text(response.error || "Ошибка при сохранении!");
                     }
                 },
                 error: function (xhr) {

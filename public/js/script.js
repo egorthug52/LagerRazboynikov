@@ -13,7 +13,7 @@ $(document).ready(() => {
     ...select2Options,
     allowClear: false,
     placeholder: "Выберите диагноз",
-    theme: "bootstrap-5"
+    theme: "bootstrap-5",
   });
 
   $("#user_region").select2({
@@ -85,99 +85,113 @@ $(document).ready(() => {
 
   toggleFields();
 
-  $(document).ready(() => {
-    $(".save-btn").on("click", function () {
-      const $row = $(this).closest("tr");
-      const userId = $row.data("user-id");
-      const updatedData = {};
+  $(".save-btn").on("click", function () {
+    const $row = $(this).closest("tr");
+    const userId = $row.data("user-id");
+    const updatedData = {};
 
-      $row.find('td[contenteditable="true"]').each(function () {
-        const $cell = $(this);
-        const field = $cell.data("field");
-        let value = $cell.text().trim();
+    $row.find('td[contenteditable="true"]').each(function () {
+      const $cell = $(this);
+      const field = $cell.data("field");
+      let value = $cell.text().trim();
 
-        if (field === "isAdmin") {
-          value = value === "Администратор" ? 1 : 0;
-        } else if (field === "superuser") {
-          value = value === "Суперюзер" ? 1 : 0;
-        } else if (field === "full_name") {
-          const [last_name, first_name, middle_name] = value
-            .split(" ")
-            .filter(Boolean);
-          updatedData["last_name"] = last_name || "";
-          updatedData["first_name"] = first_name || "";
-          updatedData["middle_name"] = middle_name || "";
-        } else {
-          updatedData[field] = value;
-        }
-      });
-
-      $.ajax({
-        url: "./php/update_user.php",
-        method: "POST",
-        data: {
-          user_id: userId,
-          ...updatedData,
-        },
-        success: function (response) {
-          try {
-            const result = JSON.parse(response);
-            if (result.success) {
-              alert("Данные успешно обновлены!");
-            } else {
-              alert("Ошибка: " + result.message);
-            }
-          } catch (e) {
-            alert("Ошибка при обработке ответа сервера");
-          }
-        },
-        error: function () {
-          alert("Ошибка связи с сервером");
-        },
-      });
+      if (field === "isAdmin") {
+        value = value === "Администратор" ? 1 : 0;
+      } else if (field === "superuser") {
+        value = value === "Суперюзер" ? 1 : 0;
+      } else if (field === "full_name") {
+        const [last_name, first_name, middle_name] = value
+          .split(" ")
+          .filter(Boolean);
+        updatedData["last_name"] = last_name || "";
+        updatedData["first_name"] = first_name || "";
+        updatedData["middle_name"] = middle_name || "";
+      } else {
+        updatedData[field] = value;
+      }
     });
 
-    $('td[contenteditable="true"]')
-      .on("focus", function () {
-        $(this).css("background-color", "#fff3cd");
-      })
-      .on("blur", function () {
-        $(this).css("background-color", "rgba(255, 255, 255, 0.7)");
-      });
+    $.ajax({
+      url: "./php/update_user.php",
+      method: "POST",
+      data: {
+        user_id: userId,
+        ...updatedData,
+      },
+      success: function (response) {
+        try {
+          const result = JSON.parse(response);
+          if (result.success) {
+            alert("Данные успешно обновлены!");
+          } else {
+            alert("Ошибка: " + result.message);
+          }
+        } catch (e) {
+          alert("Ошибка при обработке ответа сервера");
+        }
+      },
+      error: function () {
+        alert("Ошибка связи с сервером");
+      },
+    });
   });
 
-  $('#userForm').on('submit', function(event) {
-    event.preventDefault();
-  
+  $('td[contenteditable="true"]')
+    .on("focus", function () {
+      $(this).css("background-color", "#fff3cd");
+    })
+    .on("blur", function () {
+      $(this).css("background-color", "rgba(255, 255, 255, 0.7)");
+    });
+
+  $("#userForm").on("submit", function (e) {
+    e.preventDefault();
+
     const formData = new FormData(this);
     const xhr = new XMLHttpRequest();
-  
-    xhr.open('POST', './php/update_user.php', true);
 
-    xhr.onload = function() {
+    xhr.open("POST", "./php/update_user.php", true);
+
+    xhr.onload = function () {
       if (xhr.status === 200) {
-          try {
-              const response = JSON.parse(xhr.responseText);
-              if (response.status === 'success') {
-                  $('#uploadMessage').html('<div class="alert alert-success">' + response.message + '</div>');
-              } else {
-                  $('#uploadMessage').html('<div class="alert alert-danger">' + response.message + '</div>');
-              }
-              setTimeout(function() {
-                  $('#uploadMessage').html('');
-              }, 5000);
-          } catch (e) {
-              $('#uploadMessage').html('<div class="alert alert-danger">Ошибка обработки ответа: ' + e.message + '</div>');
+        try {
+          const response = JSON.parse(xhr.responseText);
+          if (response.status === "success") {
+            $("#uploadMessage").html(
+              '<div class="alert alert-success">' + response.message + "</div>"
+            );
+          } else {
+            $("#uploadMessage").html(
+              '<div class="alert alert-danger">' + response.message + "</div>"
+            );
           }
+          setTimeout(function () {
+            $("#uploadMessage").html("");
+          }, 5000);
+        } catch (e) {
+          $("#uploadMessage").html(
+            '<div class="alert alert-danger">Ошибка обработки ответа: ' +
+              e.message +
+              "</div>"
+          );
+        }
       } else {
-          $('#uploadMessage').html('<div class="alert alert-danger">Ошибка сервера: ' + xhr.status + ' - ' + xhr.statusText + '</div>');
+        $("#uploadMessage").html(
+          '<div class="alert alert-danger">Ошибка сервера: ' +
+            xhr.status +
+            " - " +
+            xhr.statusText +
+            "</div>"
+        );
       }
-  };
-
-    xhr.onerror = function() {
-      $('#uploadMessage').html('<div class="alert alert-danger">Ошибка сети. Проверьте подключение.</div>');
     };
-    
+
+    xhr.onerror = function () {
+      $("#uploadMessage").html(
+        '<div class="alert alert-danger">Ошибка сети. Проверьте подключение.</div>'
+      );
+    };
+
     xhr.send(formData);
-  })
+  });
 });

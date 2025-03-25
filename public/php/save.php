@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: application/json');
 
 use Dom\Text;
 include '../db/db.php';
@@ -112,10 +113,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 ':file_name' => $file_name
             ]);
 
-            echo json_encode(['success' => true]);
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Карточка успешно сохранена'
+            ]);
             exit;
         } else {
-            echo json_encode(['success' => true]);
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Карточка успешно сохранена'
+            ]);
         }
 
     } catch (PDOException $e) {
