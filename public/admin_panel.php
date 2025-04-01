@@ -47,7 +47,7 @@ $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body class="background">
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1 class="text-center">Список Сотрудников</h1>
+            <h1 class="text-center">Список cотрудников</h1>
             <div>
                 <span>Вы вошли как
                     <strong><?php echo $userLastName . " " . $userFirstName . " " . $userMiddleName ?></strong></span>
