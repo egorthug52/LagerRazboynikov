@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: MariaDB-10.3
--- Время создания: Мар 25 2025 г., 19:42
+-- Время создания: Апр 25 2025 г., 08:59
 -- Версия сервера: 10.3.39-MariaDB
 -- Версия PHP: 8.1.28
 
@@ -95,7 +95,11 @@ CREATE TABLE `patients` (
 
 INSERT INTO `patients` (`id`, `phone_number`, `first_name`, `middle_name`, `last_name`, `insurance_num`, `first_name_char`, `middle_name_char`, `last_name_char`, `age`, `register_num`, `diagnosis`, `confirmed_date`, `cancellation_date`, `disease_date`, `creation_date`, `creator_id`, `creator_name`, `region`) VALUES
 (49, '+71234123412', 'Sdfgsd', 'Sdfg', 'Sdfg', '3242134', 'S**', 'S**', 'S**', 12, '43225435', 17, 1742504400, NULL, 1741640400, '2025-03-25 16:36:48', 6, '321', '77'),
-(50, '+73425324523', 'Dfsgv', 'Zxcv', 'Zxcv', '435345435', 'D**', 'Z**', 'Z**', 23, '3244325', 19, 1742504400, NULL, 1741640400, '2025-03-25 16:37:34', 8, '234', '22');
+(50, '+73425324523', 'Dfsgv', 'Zxcv', 'Zxcv', '435345435', 'D**', 'Z**', 'Z**', 23, '3244325', 19, 1742504400, NULL, 1741640400, '2025-03-25 16:37:34', 8, '234', '22'),
+(57, '+71234123412', 'Dsfg', 'Sdfg', 'Sfdg', '21341234', 'D**', 'S**', 'S**', 23, '345', 2, 1741467600, NULL, 1741122000, '2025-03-25 17:14:42', 5, '123', '77'),
+(59, '+71234123412', 'Фыав', 'Фыва', 'Фыва', '32412324', 'Ф**', 'Ф**', 'Ф**', 23, '3534', 4, 1741381200, NULL, 1741035600, '2025-03-25 17:23:57', 5, '123', '77'),
+(60, '+72345234523', 'Asdfg', 'Sdfg', 'Sdfg', '23452345', 'A**', 'S**', 'S**', 23, '345234', 3, NULL, 1742504400, 1741726800, '2025-03-25 17:24:11', 5, '123', '77'),
+(61, '+72345234523', 'Аывп', 'Ывап', 'Ывап', '342534252345', 'А**', 'Ы**', 'Ы**', 34, '65авпр', 3, NULL, 1743368400, 1743368400, '2025-04-01 18:05:20', 5, '123', '77');
 
 -- --------------------------------------------------------
 
@@ -110,6 +114,13 @@ CREATE TABLE `patient_files` (
   `file_name` varchar(255) NOT NULL,
   `upload_date` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `patient_files`
+--
+
+INSERT INTO `patient_files` (`id`, `patient_id`, `file_path`, `file_name`, `upload_date`) VALUES
+(31, 49, '../uploads/67e6ccf48ca28.docx', '3119.docx', '2025-03-28 19:23:16');
 
 -- --------------------------------------------------------
 
@@ -245,7 +256,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`, `created_at`, `isAdmin`, `superuser`, `user_region`, `first_name`, `middle_name`, `last_name`, `email`) VALUES
 (5, '123', '$2y$10$DizqDX1gIL/6e5dBJgjof.1DlB4DXyQ9mU8x78PVbXSwVYewbf0Si', '2025-03-16 08:31:53', 1, 1, '77', 'Имя', 'Отчество', 'Фамилия', 'terewgdfsgbdsfbst@mail.com'),
-(6, '321', '$2y$10$laomIgqVpiSmyPPn2Cfzb.c2NP9PZ1183ZBfwEMSormfLLvYSZbMW', '2025-03-17 17:54:00', 1, 0, '22', 'Тестовый', 'Региональный', 'Админ', 'hjlj@gasldj.asd'),
+(6, '321', '$2y$10$laomIgqVpiSmyPPn2Cfzb.c2NP9PZ1183ZBfwEMSormfLLvYSZbMW', '2025-03-17 17:54:00', 1, 0, '77', 'Тестовый', 'Региональный', 'Админ', 'hjlj@gasldj.asd'),
 (8, '234', '$2y$10$2QuGqyx.N3v6r/J3.ZcS1.RJ.txt2GdNkOPxk67Z3VzQlxWMA7Hle', '2025-03-25 16:30:25', 0, 0, '22', 'Fasdf', 'Asdf', 'Sdfg', 'sdfg@gfdas.consda');
 
 --
@@ -304,13 +315,13 @@ ALTER TABLE `diseases`
 -- AUTO_INCREMENT для таблицы `patients`
 --
 ALTER TABLE `patients`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT для таблицы `patient_files`
 --
 ALTER TABLE `patient_files`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT для таблицы `regions`
@@ -322,7 +333,7 @@ ALTER TABLE `regions`
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
