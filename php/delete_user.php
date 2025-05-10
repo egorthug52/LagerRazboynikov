@@ -10,17 +10,21 @@ if (isset($_GET['id'])) {
         $stmt->execute([':id' => $id]);
 
         if ($stmt->rowCount() > 0) {
-            echo "Запись успешно удалена.";
+            // Успешное удаление → перенаправляем с сообщением
+            header("Location: ../admin_panel.php?status=success");
+            exit;
         } else {
-            echo "Запись с указанным ID не найдена.";
+            // Не найдено → перенаправляем с сообщением
+            header("Location: ../admin_panel.php?status=notfound");
+            exit;
         }
     } catch (PDOException $e) {
-        echo "Ошибка при удалении записи: " . $e->getMessage();
+        // Ошибка БД → перенаправляем с сообщением
+        header("Location: ../admin_panel.php?status=error");
+        exit;
     }
 } else {
-    echo "ID записи не указан.";
+    // ID не указан → перенаправляем с сообщением
+    header("Location: ../admin_panel.php?status=noid");
+    exit;
 }
-
-header("Location: ../admin_panel.php");
-exit;
-?>

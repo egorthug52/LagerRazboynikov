@@ -30,6 +30,8 @@ $stmt = $conn->prepare($sql);
 $stmt->execute([':user_id' => $user_id]);
 
 $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -110,5 +112,52 @@ $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <script src="./js/script.js"></script>
 </body>
+<?php
+if (isset($_GET['status'])) {
+    $status = $_GET['status'];
+    $alert = '';
+    $message = '';
 
+    switch ($status) {
+        case 'success':
+            $alert = 'alert-success';
+            $message = 'Запись успешно удалена.';
+            break;
+        case 'notfound':
+            $alert = 'alert-warning';
+            $message = 'Запись с указанным ID не найдена.';
+            break;
+        case 'error':
+            $alert = 'alert-danger';
+            $message = 'Ошибка при удалении записи.';
+            break;
+        case 'noid':
+            $alert = 'alert-danger';
+            $message = 'ID записи не указан.';
+            break;
+    }
+
+    if ($alert && $message) {
+        echo "
+        <div class='position-fixed top-0 end-0 p-3' style='z-index: 1050;'>
+            <div id='liveAlert' class='alert $alert alert-dismissible fade show' role='alert'>
+                $message
+                <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Закрыть'></button>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function() {
+                $('#liveAlert .btn-close').on('click', function() {
+                    $('#liveAlert').fadeOut(300);
+                });
+
+                setTimeout(function() {
+                    $('#liveAlert').fadeOut(300);
+                }, 4000);
+            });
+        </script>
+        ";
+    }
+}
+?>
 </html>
