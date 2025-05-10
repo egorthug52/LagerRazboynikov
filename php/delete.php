@@ -10,17 +10,18 @@ if (isset($_GET['id'])) {
         $stmt->execute([':id' => $id]);
 
         if ($stmt->rowCount() > 0) {
-            echo "Запись успешно удалена.";
+            header("Location: ../index.php?status=success");
+            exit;
         } else {
-            echo "Запись с указанным ID не найдена.";
+            header("Location: ../index.php?status=notfound");
+            exit;
         }
     } catch (PDOException $e) {
-        echo "Ошибка при удалении записи: " . $e->getMessage();
+        header("Location: ../index.php?status=error");
+        exit;
     }
 } else {
-    echo "ID записи не указан.";
+    header("Location: ../index.php?status=noid");
+    exit;
 }
-
-header("Location: ../index.php");
-exit;
 ?>

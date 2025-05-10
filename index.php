@@ -57,6 +57,7 @@ $patients = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Облачное хранилище</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body class="background">
@@ -114,5 +115,54 @@ $patients = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </table>
     </div>
 </body>
+
+<?php
+if (isset($_GET['status'])) {
+    $status = $_GET['status'];
+    $alert = '';
+    $message = '';
+
+    switch ($status) {
+        case 'success':
+            $alert = 'alert-success';
+            $message = 'Запись успешно удалена.';
+            break;
+        case 'notfound':
+            $alert = 'alert-warning';
+            $message = 'Запись с указанным ID не найдена.';
+            break;
+        case 'error':
+            $alert = 'alert-danger';
+            $message = 'Ошибка при удалении записи.';
+            break;
+        case 'noid':
+            $alert = 'alert-danger';
+            $message = 'ID записи не указан.';
+            break;
+    }
+
+    if ($alert && $message) {
+        echo "
+        <div class='position-fixed top-0 end-0 p-3' style='z-index: 1050;'>
+            <div id='liveAlert' class='alert $alert alert-dismissible show' role='alert'>
+                $message
+                <button type='button' class='btn-close' aria-label='Закрыть'></button>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function() {
+                $('#liveAlert .btn-close').on('click', function() {
+                    $('#liveAlert').fadeOut(300);
+                });
+
+                setTimeout(function() {
+                    $('#liveAlert').fadeOut(300);
+                }, 4000);
+            });
+        </script>
+        ";
+    }
+}
+?>
 
 </html>
