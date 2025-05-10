@@ -29,7 +29,7 @@ if (!$stmt->execute([":password" => $hashed_password, ":id" => $user_id])) {
 
 $subject = "Ваш новый пароль";
 $message = "Здравствуйте!\nВаш новый пароль: $new_password";
-$headers = "From: admin@yourdomain.com";
+$headers = "From: admin@rpn-diplom.ru";
 
 if (!mail($email, $subject, $message, $headers)) {
     echo json_encode(['success' => false, 'message' => 'Ошибка отправки email']);
