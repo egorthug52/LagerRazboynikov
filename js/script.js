@@ -194,4 +194,26 @@ $(document).ready(() => {
 
     xhr.send(formData);
   });
+
+  $(".reset-password-btn").on("click", function () {
+    const userId = $(this).data("user-id");
+  
+    if (confirm("Вы уверены, что хотите сбросить пароль?")) {
+      $.post("../php/reset_password.php", { user_id: userId }, function (response) {
+        try {
+          const result = JSON.parse(response);
+          if (result.success) {
+            alert("Пароль сброшен и отправлен на email пользователя.");
+          } else {
+            alert("Ошибка: " + result.message);
+          }
+        } catch (e) {
+          alert("Ошибка обработки ответа сервера.");
+        }
+      }).fail(function () {
+        alert("Ошибка связи с сервером.");
+      });
+    }
+  });
+  
 });

@@ -123,6 +123,7 @@ if (isset($_GET['id'])) {
                 <div class="button-container">
                     <button type="submit" class="btn btn-primary">Сохранить</button>
                     <a href="./admin_panel.php" class="btn btn-secondary">Вернуться к списку сотрудников</a>
+                    <a class='btn btn-light btn-sm reset-password-btn' data-user-id="<?= $id ?>">Сбросить пароль</a>
                 </div>
             </form>
         </div>
